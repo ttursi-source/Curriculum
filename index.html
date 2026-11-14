@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomás Andrés Tursi — Ingeniería, Negocios & Sistemas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F6F5F0;
+      --bg-cell: #EFECE6;
+      --ink-primary: #111111;
+      --ink-secondary: #4A4A46;
+      --ink-muted: #787872;
+      --border-strong: #111111;
+      --border-hairline: #C8C5BC;
+      --accent-tech: #0038A8;
+      --accent-signal: #D9381E;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-editorial: 'Newsreader', Georgia, serif;
+    }
+
+    [data-theme="terminal"] {
+      --bg-paper: #0D0E0D;
+      --bg-cell: #161816;
+      --ink-primary: #EAEAEA;
+      --ink-secondary: #A6ACA6;
+      --ink-muted: #686E68;
+      --border-strong: #EAEAEA;
+      --border-hairline: #2C302C;
+      --accent-tech: #5C9DFF;
+      --accent-signal: #FF5533;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      color: var(--ink-primary);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: clamp(1rem, 3vw, 2.5rem);
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-paper);
+    }
+
+    /* BARRA SUPERIOR DE SISTEMA */
+    .sys-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 0.65rem 1.25rem;
+      border-bottom: 1px solid var(--border-strong);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background-color: var(--bg-cell);
+    }
+
+    .sys-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--accent-signal);
+      display: inline-block;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border-strong);
+      color: var(--ink-primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--ink-primary);
+      color: var(--bg-paper);
+    }
+
+    /* ENCABEZADO EDITORIAL */
+    header {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    .header-main {
+      padding: clamp(1.5rem, 4vw, 3rem) 1.5rem;
+      border-right: 1px solid var(--border-strong);
+    }
+
+    .index-label {
+      font-size: 11px;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4.5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .header-lead {
+      font-family: var(--font-editorial);
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      color: var(--ink-secondary);
+      max-width: 62ch;
+      line-height: 1.45;
+    }
+
+    .header-meta {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .meta-table td {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+      vertical-align: top;
+    }
+
+    .meta-table td:first-child {
+      color: var(--ink-muted);
+      width: 38%;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--ink-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink-primary);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-signal);
+      border-color: var(--accent-signal);
+    }
+
+    /* SECCIÓN 01: SOBRE MÍ */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--border-strong);
+      background-color: var(--bg-cell);
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.4fr 0.9fr;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    .about-photo-cell {
+      padding: 1.5rem;
+      border-right: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .figure-frame {
+      border: 1px solid var(--border-strong);
+      padding: 6px;
+      background-color: var(--bg-paper);
+      height: 100%;
+    }
+
+    .figure-frame img {
+      width: 100%;
+      height: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      display: block;
+      filter: contrast(1.03);
+    }
+
+    figcaption {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 0.65rem;
+      line-height: 1.4;
+    }
+
+    .about-bio-cell {
+      padding: 1.75rem;
+      border-right: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .about-bio-cell h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .about-bio-cell p {
+      color: var(--ink-secondary);
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .about-specs-cell {
+      padding: 1.5rem;
+      background-color: var(--bg-paper);
+    }
+
+    .spec-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .spec-group-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border-bottom: 1px solid var(--border-hairline);
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.05em;
+    }
+
+    .spec-list {
+      list-style: none;
+      font-size: 12.5px;
+    }
+
+    .spec-list li {
+      padding: 0.22rem 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* SECCIÓN 02: DASHBOARD DE PROYECTOS E HITOS */
+    .dashboard-index {
+      width: 100%;
+      border-collapse: collapse;
+      border-bottom: 1px solid var(--border-strong);
+      font-size: 12.5px;
+    }
+
+    .dashboard-index th {
+      text-align: left;
+      padding: 0.65rem 1.5rem;
+      border-bottom: 1px solid var(--border-strong);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .dashboard-index td {
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .dashboard-index tr:hover {
+      background-color: var(--bg-cell);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border: 1px solid var(--border-strong);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .tag-active {
+      background-color: var(--ink-primary);
+      color: var(--bg-paper);
+    }
+
+    /* GRILLA ASIMÉTRICA DE PROYECTOS */
+    .projects-bento {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    .project-card {
+      padding: 1.75rem;
+      border-bottom: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project-card:nth-child(odd) {
+      border-right: 1px solid var(--border-strong);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-id {
+      font-size: 11px;
+      color: var(--accent-signal);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .project-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .project-desc {
+      color: var(--ink-secondary);
+      margin-bottom: 1.25rem;
+      font-size: 13.5px;
+    }
+
+    .project-media {
+      margin: 1rem 0;
+      border: 1px solid var(--border-strong);
+      background-color: #FFFFFF;
+      padding: 0.75rem;
+    }
+
+    .project-media img {
+      width: 100%;
+      max-height: 290px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .project-media.cover img {
+      object-fit: cover;
+    }
+
+    .project-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border-hairline);
+      padding-top: 0.85rem;
+      margin-top: 1rem;
+      font-size: 11.5px;
+    }
+
+    .metric-item span {
+      display: block;
+      color: var(--ink-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .metric-item strong {
+      font-weight: 600;
+    }
+
+    /* FILA INFERIOR DE 3 COLUMNAS (PREMIOS, DATATHON, ASTRONOMÍA) */
+    .achievements-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.9fr;
+    }
+
+    .achievement-cell {
+      padding: 1.75rem;
+      border-right: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .achievement-cell:last-child {
+      border-right: none;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      background-color: var(--bg-cell);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      header,
+      .about-grid,
+      .projects-bento,
+      .achievements-row {
+        grid-template-columns: 1fr;
+      }
+
+      .header-main,
+      .about-photo-cell,
+      .about-bio-cell,
+      .project-card:nth-child(odd),
+      .achievement-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-strong);
+      }
+
+      .dashboard-index {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- BARRA DE SISTEMA -->
+    <div class="sys-bar">
+      <div class="sys-status">
+        <span class="status-dot"></span>
+        <span>SYS.ID // TAT-PORTFOLIO-V2.6</span>
+        <span>|</span>
+        <span>LOC: 34.6037° S, 58.3816° W (BUENOS AIRES, AR)</span>
+      </div>
+      <div>
+        <button class="theme-toggle" onclick="toggleTheme()">[ MODO: PAPEL / TERMINAL ]</button>
+      </div>
+    </div>
+
+    <!-- ENCABEZADO -->
+    <header>
+      <div class="header-main">
+        <span class="index-label">00 // ÍNDICE GENERAL & DOSSIER TÉCNICO</span>
+        <h1>Tomás Andrés Tursi</h1>
+        <p class="header-lead">
+          Estudiante becado de Licenciatura en Negocios y Tecnología en el ITBA. Construyendo en la intersección de robótica física con visión artificial, sistemas cuantitativos e inteligencia artificial aplicada.
+        </p>
+        <nav class="nav-links">
+          <a href="#sobre-mi">01. SOBRE_MÍ</a>
+          <a href="#dashboard">02. DASHBOARD_PROYECTOS</a>
+          <a href="#hitos">03. PREMIOS_&_COMPETENCIAS</a>
+          <a href="mailto:ttursi@itba.edu.ar">04. CONTACTO ↗</a>
+        </nav>
+      </div>
+
+      <div class="header-meta">
+        <table class="meta-table">
+          <tr>
+            <td>INSTITUCIÓN</td>
+            <td>ITBA (Beca al Mérito)</td>
+          </tr>
+          <tr>
+            <td>ENFOQUE</td>
+            <td>Hardware AI, Ventures, Quant</td>
+          </tr>
+          <tr>
+            <td>VENTURE ACTUAL</td>
+            <td>DishClaw Robotics</td>
+          </tr>
+          <tr>
+            <td>STACK BASE</td>
+            <td>Python, ESP32, OpenSCAD, SQL</td>
+          </tr>
+          <tr>
+            <td>ACTUALIZADO</td>
+            <td>NOV 2026</td>
+          </tr>
+        </table>
+        <div style="margin-top: 1rem; font-size: 11px; color: var(--ink-muted);">
+          RATIO DATOS-TINTA: ESTRICTO // GRILLA MONOESPACIADA
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- SECCIÓN 01: SOBRE MÍ -->
+      <div class="section-header" id="sobre-mi">
+        <span class="section-title">01 / SOBRE MÍ — PERFIL & ARQUITECTURA DE TRABAJO</span>
+        <span class="index-label" style="margin: 0;">PERFIL EJECUTIVO</span>
+      </div>
+
+      <section class="about-grid">
+        <figure class="about-photo-cell">
+          <div class="figure-frame">
+            <img src="perfil.jpg" alt="Tomás Andrés Tursi">
+          </div>
+        </figure>
+
+        <div class="about-bio-cell">
+          <div>
+            <span class="project-id">BIO // SÍNTESIS EJECUTIVA</span>
+            <h2>De prototipos físicos en microcontroladores a modelos estratégicos de negocios y datos.</h2>
+            <p>
+              Tengo 19 años y estudio la <strong>Licenciatura en Negocios y Tecnología en el Instituto Tecnológico de Buenos Aires (ITBA)</strong>, donde mantengo una beca al mérito académico. Mi enfoque consiste en diseñar soluciones desde los primeros principios: combinar ingeniería tangible (impresión 3D paramétrica en OpenSCAD, microcontroladores ESP32-S3 y visión por computadora) con estructuración comercial escalable.
+            </p>
+            <p>
+              Además de liderar el desarrollo de hardware en <strong>DishClaw Robotics</strong> y plataformas con IA como <strong>Doná</strong>, dirijo el <strong>Club de Inversiones</strong> en el ITBA y co-lidero la agencia de automatización <strong>TEOS</strong>. Creo firmemente en la densidad de talento, las herramientas ligeras basadas en terminal y el diseño de información sin ruido visual.
+            </p>
+          </div>
+
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>EDAD / BASE</span>
+              <strong>19 Años · CABA</strong>
+            </div>
+            <div class="metric-item">
+              <span>DISTINCIÓN</span>
+              <strong>Beca al Mérito ITBA</strong>
+            </div>
+            <div class="metric-item">
+              <span>LIDERAZGO</span>
+              <strong>Club de Inversiones & TEOS</strong>
+            </div>
+          </div>
+        </div>
+
+        <aside class="about-specs-cell">
+          <div class="spec-group">
+            <div class="spec-group-title">INGENIERÍA & SOFTWARE</div>
+            <ul class="spec-list">
+              <li><span>Python (pandas / PyTorch)</span> <strong>[AVANZADO]</strong></li>
+              <li><span>FastAPI / PostgreSQL</span> <strong>[PRODUCCIÓN]</strong></li>
+              <li><span>HTML / CSS / JS / Leaflet</span> <strong>[FULL-STACK]</strong></li>
+              <li><span>Docker / Linux (Ubuntu)</span> <strong>[INFRA]</strong></li>
+            </ul>
+          </div>
+
+          <div class="spec-group">
+            <div class="spec-group-title">PHYSICAL COMPUTING</div>
+            <ul class="spec-list">
+              <li><span>ESP32-S3 / Sensores OV</span> <strong>[HARDWARE]</strong></li>
+              <li><span>OpenSCAD / CAD 3D</span> <strong>[PROTOTIPADO]</strong></li>
+              <li><span>Sistemas de Visión IA</span> <strong>[EDGE AI]</strong></li>
+            </ul>
+          </div>
+
+          <div class="spec-group">
+            <div class="spec-group-title">FINANZAS & ESTRATEGIA</div>
+            <ul class="spec-list">
+              <li><span>Valuación & Deal Sourcing</span> <strong>[PE / VC]</strong></li>
+              <li><span>Estrategias de Opciones</span> <strong>[QUANT]</strong></li>
+              <li><span>Idiomas</span> <strong>[ES / EN / FR]</strong></li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <!-- SECCIÓN 02: TABLA RESUMEN DEL DASHBOARD -->
+      <div class="section-header" id="dashboard">
+        <span class="section-title">02 / DASHBOARD — MATRIZ DE PROYECTOS E HITOS</span>
+        <span class="index-label" style="margin: 0;">REGISTRO VERIFICADO // 5 ENTRADAS</span>
+      </div>
+
+      <table class="dashboard-index">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>PROYECTO / HITO</th>
+            <th>DOMINIO</th>
+            <th>STACK / METODOLOGÍA</th>
+            <th>ESTADO / RESULTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>[01]</strong></td>
+            <td><strong>DishClaw Robotics</strong></td>
+            <td>Robótica Doméstica & CV</td>
+            <td>ESP32-S3, OpenSCAD, Actuadores, Visión IA</td>
+            <td><span class="tag tag-active">PRE-SEED R&D</span></td>
+          </tr>
+          <tr>
+            <td><strong>[02]</strong></td>
+            <td><strong>Doná</strong></td>
+            <td>Economía Circular & IA</td>
+            <td>PWA, Gemini AI Vision, Geolocalización CABA</td>
+            <td><span class="tag tag-active">PREMIOS ILAN</span></td>
+          </tr>
+          <tr>
+            <td><strong>[03]</strong></td>
+            <td><strong>Premios en el ITBA</strong></td>
+            <td>Estrategia & Hardware</td>
+            <td>Desafío ITBA (1° Puesto) · P.E.R.A 3D (INNOVA)</td>
+            <td><span class="tag">1° PUESTO & FINALISTA</span></td>
+          </tr>
+          <tr>
+            <td><strong>[04]</strong></td>
+            <td><strong>Datathon ITBA × Equifax</strong></td>
+            <td>Data Science & Expansión</td>
+            <td>Python, pandas, Modelado Cuantitativo Masivo</td>
+            <td><span class="tag">3° PUESTO (PODIO)</span></td>
+          </tr>
+          <tr>
+            <td><strong>[05]</strong></td>
+            <td><strong>Olimpiadas de Astronomía</strong></td>
+            <td>Ciencias Exactas</td>
+            <td>Mecánica Celeste, Astrofísica, Cálculo</td>
+            <td><span class="tag">COMPETENCIA NACIONAL</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- PROYECTOS PRINCIPALES CON ESQUEMAS VISUALES -->
+      <section class="projects-bento">
+        <!-- PROYECTO 1: DISHCLAW ROBOTICS -->
+        <article class="project-card">
+          <div>
+            <div class="project-header">
+              <div>
+                <span class="project-id">PROYECTO 01 // ROBÓTICA & HARDWARE</span>
+                <h3 class="project-title">DishClaw Robotics</h3>
+              </div>
+              <span class="tag tag-active">VENTURE</span>
+            </div>
+            <p class="project-desc">
+              Desarrollo de garras robóticas adaptativas guiadas por visión artificial (<strong>DishClaw</strong>) que se montan directamente sobre piletas de cocina estándar para identificar, raspar, pre-lavar y acomodar vajilla de forma autónoma. Cierra el último cuello de botella manual en la automatización doméstica integrando sensores ópticos, cinemática articulada y agarre complaciente para superficies cerámicas húmedas.
+            </p>
+            <figure class="project-media">
+              <img src="dishclaw.png" alt="Esquema mecánico de la garra robótica DishClaw">
+              <figcaption style="border-top: 1px solid var(--border-hairline); padding-top: 0.5rem;">
+                <strong>FIG. 2.1:</strong> Esquema mecánico preliminar del sistema articulado de brazo y pinza de accionamiento fluido/mecánico para manipulación de vajilla.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>ARQUITECTURA</span>
+              <strong>Visión + Garra Adaptativa</strong>
+            </div>
+            <div class="metric-item">
+              <span>PROTOTIPADO</span>
+              <strong>OpenSCAD & ESP32-S3</strong>
+            </div>
+            <div class="metric-item">
+              <span>ETAPA</span>
+              <strong>Pre-Seed / Benchtop MVP</strong>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROYECTO 2: DONÁ -->
+        <article class="project-card">
+          <div>
+            <div class="project-header">
+              <div>
+                <span class="project-id">PROYECTO 02 // IMPACTO & COMPUTER VISION</span>
+                <h3 class="project-title">Doná — Plataforma Circular</h3>
+              </div>
+              <span class="tag">PWA / IA</span>
+            </div>
+            <p class="project-desc">
+              Aplicación web progresiva (PWA) y motor de economía circular desarrollado para los <strong>ILAN Innovation Awards</strong>. Utiliza modelos de visión de Gemini AI para identificar objetos en tiempo real a partir de una foto, clasificar su estado y conectar instantáneamente al donante con los 30 centros de donación más adecuados en la Ciudad de Buenos Aires, integrando incentivos de descuento.
+            </p>
+            <figure class="project-media cover">
+              <img src="dona.jpg" alt="Identidad visual de Doná">
+              <figcaption style="border-top: 1px solid var(--border-hairline); padding-top: 0.5rem;">
+                <strong>FIG. 2.2:</strong> Sistema de identidad de Doná. Red logística inteligente para conectar excedentes urbanos con 30 centros en CABA.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>COBERTURA</span>
+              <strong>30 Centros en CABA</strong>
+            </div>
+            <div class="metric-item">
+              <span>MOTOR IA</span>
+              <strong>Clasificación Óptica</strong>
+            </div>
+            <div class="metric-item">
+              <span>MARCO</span>
+              <strong>ILAN Innovation Awards</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- SECCIÓN 03: PREMIOS, DATATHON Y OLIMPIADAS -->
+      <div class="section-header" id="hitos">
+        <span class="section-title">03 / RECONOCIMIENTOS ACADÉMICOS, DATATHON & OLIMPIADAS</span>
+        <span class="index-label" style="margin: 0;">EVIDENCIA DE EJECUCIÓN</span>
+      </div>
+
+      <section class="achievements-row">
+        <!-- HITO 1: PREMIOS EN EL ITBA -->
+        <article class="achievement-cell">
+          <div>
+            <span class="project-id">HITO 03 // ESTRATEGIA & HARDWARE</span>
+            <h3 class="project-title" style="margin-bottom: 0.75rem;">Premios en el ITBA</h3>
+            <p class="project-desc">
+              <strong>1° Puesto en Desafío ITBA 2025:</strong> Ganador de la competencia de negocios y analítica desarrollando una estrategia de mercado escalable y validada frente a jurado académico e industrial.
+            </p>
+            <p class="project-desc">
+              <strong>Finalista INNOVA ITBA (P.E.R.A 3D):</strong> Diseño de una extrusora y sistema físico para reciclar botellas de plástico PET convirtiéndolas en filamento apto para impresión 3D. Además, becado por mérito académico en la universidad.
+            </p>
+            <figure class="project-media cover">
+              <img src="itba.jpg" alt="Tomás Tursi 1° Puesto Desafío ITBA 2025">
+              <figcaption style="border-top: 1px solid var(--border-hairline); padding-top: 0.5rem;">
+                <strong>FIG. 3.1:</strong> Premiación del 1° Puesto en el Desafío ITBA 2025 (Lic. en Negocios y Tecnología / Analítica).
+              </figcaption>
+            </figure>
+          </div>
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>DESAFÍO ITBA</span>
+              <strong>1° Puesto</strong>
+            </div>
+            <div class="metric-item">
+              <span>INNOVA ITBA</span>
+              <strong>Finalista</strong>
+            </div>
+            <div class="metric-item">
+              <span>ACADÉMICO</span>
+              <strong>Beca al Mérito</strong>
+            </div>
+          </div>
+        </article>
+
+        <!-- HITO 2: DATATHON ITBA x EQUIFAX -->
+        <article class="achievement-cell">
+          <div>
+            <span class="project-id">HITO 04 // CIENCIA DE DATOS</span>
+            <h3 class="project-title" style="margin-bottom: 0.75rem;">Datathon ITBA × Equifax 2026</h3>
+            <p class="project-desc">
+              Obtuve el <strong>3° Puesto</strong> en la competencia intensiva de ciencia de datos organizada por el ITBA junto a Equifax.
+            </p>
+            <p class="project-desc">
+              Diseñé y programé modelos cuantitativos de expansión estratégica procesando grandes volúmenes de datos demográficos, crediticios y geoespaciales en <strong>Python</strong> y <strong>pandas</strong>. El pipeline permitió limpiar ruido estadístico, detectar zonas sub-atendidas con alto potencial de retorno y defender la tesis de inversión con métricas de riesgo precisas.
+            </p>
+            <div style="border: 1px solid var(--border-strong); padding: 1rem; background-color: var(--bg-cell); font-size: 12px; margin-top: 1rem;">
+              <div style="color: var(--ink-muted); margin-bottom: 0.4rem;">// PIPELINE EJECUTADO</div>
+              <code>raw_dataset &rarr; pandas.clean() &rarr; scoring_expansion_matrix &rarr; 3rd_Place_Podio</code>
+            </div>
+          </div>
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>RESULTADO</span>
+              <strong>3° Puesto</strong>
+            </div>
+            <div class="metric-item">
+              <span>HERRAMIENTAS</span>
+              <strong>Python / pandas</strong>
+            </div>
+            <div class="metric-item">
+              <span>SPONSOR</span>
+              <strong>Equifax & ITBA</strong>
+            </div>
+          </div>
+        </article>
+
+        <!-- HITO 3: OLIMPIADAS DE ASTRONOMÍA -->
+        <article class="achievement-cell">
+          <div>
+            <span class="project-id">HITO 05 // CIENCIAS EXACTAS</span>
+            <h3 class="project-title" style="margin-bottom: 0.75rem;">Olimpiadas de Astronomía</h3>
+            <p class="project-desc">
+              Participación competitiva en las Olimpiadas de Astronomía, resolviendo problemas complejos de mecánica celeste, gravitación, fotometría y física teórica.
+            </p>
+            <p class="project-desc">
+              Esta base rigurosa en física y modelado matemático de sistemas dinámicos constituye el cimiento analítico con el que hoy abordo tanto la cinemática de hardware como la ingeniería financiera.
+            </p>
+            <div style="border: 1px solid var(--border-strong); padding: 1rem; background-color: var(--bg-cell); font-size: 12px; margin-top: 1rem;">
+              <div style="color: var(--ink-muted); margin-bottom: 0.4rem;">// DOMINIOS TÉCNICOS</div>
+              <div>• Mecánica Orbital & Leyes de Kepler</div>
+              <div>• Óptica & Instrumentación</div>
+              <div>• Modelado Físico-Matemático</div>
+            </div>
+          </div>
+          <div class="project-metrics">
+            <div class="metric-item">
+              <span>DISCIPLINA</span>
+              <strong>Astrofísica</strong>
+            </div>
+            <div class="metric-item">
+              <span>ENFOQUE</span>
+              <strong>Cálculo & Física</strong>
+            </div>
+            <div class="metric-item">
+              <span>COMPLEMENTO</span>
+              <strong>Modelo ONU</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+      <div>
+        <strong>TOMÁS ANDRÉS TURSI</strong> — BUENOS AIRES, ARGENTINA
+      </div>
+      <div>
+        DISEÑO MONOESPACIADO DE ALTA DENSIDAD // SIN PLANTILLAS GENÉRICAS
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      if (body.getAttribute('data-theme') === 'terminal') {
+        body.removeAttribute('data-theme');
+      } else {
+        body.setAttribute('data-theme', 'terminal');
+      }
+    }
+  </script>
+</body>
+</html>
